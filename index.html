@@ -2,928 +2,223 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StadiumX | IPL Ticket Booking</title>
-
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{background:#090909;color:#fff;font-family:Arial,sans-serif}
-:root{--red:#ed2635;--panel:#151515;--line:#303030;--muted:#aaa}
-button,input,select{font:inherit}
-button{cursor:pointer}
-a{color:inherit;text-decoration:none}
-
-nav{height:72px;padding:0 7%;display:flex;align-items:center;justify-content:space-between;background:#101010;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}
-.logo{font-size:27px;font-weight:900;letter-spacing:2px}
-.logo span{color:var(--red)}
-.navlinks{display:flex;gap:25px}
-.navlinks a{font-size:14px}
-.navlinks a:hover{color:var(--red)}
-.menu-btn{display:none;background:none;color:white;border:0;font-size:25px}
-
-.hero{min-height:520px;padding:90px 8%;display:flex;align-items:center;background:linear-gradient(90deg,#090909 5%,#210b0d 70%,#370b11)}
-.hero-content{max-width:680px}
-.tag,.eyebrow{color:#ff6670;font-size:11px;font-weight:bold;letter-spacing:3px;margin-bottom:16px}
-.hero h1{font-size:clamp(42px,7vw,76px);line-height:1.05;margin-bottom:20px}
-.hero h1 span{color:var(--red)}
-.hero p{color:#ccc;line-height:1.8;margin-bottom:25px}
-.btn{background:var(--red);color:white;border:0;padding:14px 22px;border-radius:5px;display:inline-block}
-.btn:hover{background:#c91423}
-.btn-outline{background:transparent;border:1px solid #555;margin-left:8px}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);padding:25px 8%;background:#111}
-.stat{text-align:center}
-.stat strong{display:block;color:var(--red);font-size:25px}
-.stat span{font-size:12px;color:var(--muted)}
-
-.section{padding:60px 8%}
-.section h2{font-size:30px;margin-bottom:10px}
-.section-heading{display:flex;justify-content:space-between;align-items:end;margin-bottom:25px}
-.section-heading p{color:var(--muted);font-size:14px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.info-card,.match-card,.booking-panel{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:23px}
-.info-card h3{margin:12px 0}
-.info-card p{font-size:14px;color:var(--muted);line-height:1.7}
-.card-icon{font-size:28px}
-
-.filterbar{display:flex;gap:12px;margin-bottom:25px;flex-wrap:wrap}
-input,select{background:#171717;color:white;border:1px solid #383838;border-radius:5px;padding:13px;outline:none}
-input:focus,select:focus{border-color:var(--red)}
-.filterbar input{flex:1;min-width:200px}
-.matches{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.match-card{transition:.2s}
-.match-card:hover{border-color:var(--red);transform:translateY(-3px)}
-.match-top{display:flex;justify-content:space-between;color:var(--muted);font-size:11px}
-.teams{display:flex;justify-content:space-between;align-items:center;gap:5px;margin:20px 0}
-.team{text-align:center;flex:1}
-.team-logo{width:55px;height:55px;border-radius:50%;display:grid;place-items:center;margin:0 auto 8px;border:2px solid #777;font-size:14px;font-weight:900;background:radial-gradient(circle,#353535,#141414);box-shadow:0 0 12px #000}
-.team-name{font-size:11px;font-weight:bold;line-height:1.5}
-.vs{color:var(--red);font-weight:bold;font-size:12px}
-.match-info{border-top:1px solid var(--line);padding-top:14px;color:var(--muted);font-size:12px;line-height:2}
-.match-card .btn{width:100%;margin-top:15px}
-
-.teams-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
-.team-box{background:var(--panel);border:1px solid var(--line);padding:20px 10px;text-align:center;border-radius:8px}
-.team-box strong{display:block;font-size:12px;margin-top:10px}
-.team-box span{color:var(--muted);font-size:11px}
-
-.booking-table{width:100%;border-collapse:collapse;font-size:12px}
-.booking-table th,.booking-table td{text-align:left;padding:13px 9px;border-bottom:1px solid var(--line)}
-.booking-table th{color:var(--red)}
-.cancel-btn{background:#49151b;color:#ff9da4;border:0;padding:8px;border-radius:4px}
-.guidelines{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.guideline{background:var(--panel);border:1px solid var(--line);padding:17px;border-radius:7px;color:#ccc;font-size:13px;line-height:1.7}
-footer{text-align:center;background:#101010;padding:30px;color:#888;font-size:12px;line-height:2}
-footer strong{color:white}
-
-/* BOOKING WINDOW */
-.modal{display:none;position:fixed;inset:0;background:#000d;z-index:30;overflow-y:auto;padding:20px}
-.modal.show{display:flex;align-items:flex-start;justify-content:center}
-.modal-box{width:min(850px,100%);background:#151515;border:1px solid #444;border-radius:12px;padding:28px;position:relative;margin:auto}
-.close{position:absolute;right:20px;top:15px;background:none;border:0;color:white;font-size:28px}
-.modal-box h2{margin-bottom:8px}
-.sub{color:#aaa;font-size:13px;line-height:1.7;margin-bottom:18px}
-.step-title{font-size:16px;margin:25px 0 14px}
-.legend{display:flex;gap:18px;flex-wrap:wrap;color:#bbb;font-size:11px;margin:14px 0}
-.legend span{display:flex;align-items:center;gap:6px}
-.legend i{width:13px;height:13px;display:inline-block;border-radius:3px;background:#292929;border:1px solid #777}
-.legend .chosen{background:var(--red)}
-.legend .occupied{background:#090909;border-color:#333}
-
-/* STADIUM MAP */
-.stadium-map{background:#0c0c0c;border:1px solid #333;border-radius:12px;padding:18px;margin:15px 0}
-.map-label{text-align:center;font-size:10px;letter-spacing:2px;color:#888;margin-bottom:12px}
-.map-layout{display:grid;grid-template-columns:1fr 1.3fr 1fr;grid-template-rows:auto 135px auto;gap:10px;align-items:stretch}
-.map-stand{background:#202020;border:1px solid #4a4a4a;border-radius:8px;color:white;padding:12px 5px;text-align:center;display:flex;flex-direction:column;justify-content:center;gap:5px;transition:.2s;min-width:0;min-height:75px}
-.map-stand strong{font-size:11px}
-.map-stand small{font-size:10px;color:#aaa}
-.map-stand:hover,.map-stand.active{background:#48151c;border-color:var(--red)}
-.north{grid-column:2;grid-row:1}
-.west{grid-column:1;grid-row:2}
-.east{grid-column:3;grid-row:2}
-.south{grid-column:2;grid-row:3}
-.vip{grid-column:1;grid-row:1}
-.premium{grid-column:3;grid-row:3}
-.pitch{grid-column:2;grid-row:2;background:#173b24;border:5px solid #315b38;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-width:0}
-.pitch-line{height:55px;width:30px;border-left:2px solid #d5d5a7;border-right:2px solid #d5d5a7;display:flex;align-items:center;justify-content:center}
-.pitch strong{font-size:11px}
-.pitch small{font-size:9px;color:#d1e1d0}
-
-/* SEAT SELECTION */
-.seat-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.seat-heading span{font-size:12px;color:#aaa}
-.seat-grid{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:9px;margin:17px 0}
-.seat{min-height:38px;background:#252525;border:1px solid #656565;color:#eee;border-radius:5px;font-size:11px}
-.seat:hover:not(:disabled){border-color:white}
-.seat.selected{background:var(--red);border-color:var(--red);color:white}
-.seat.taken{background:#080808;border-color:#292929;color:#555;cursor:not-allowed}
-.seat:disabled{opacity:1}
-.price-summary{background:#101010;padding:16px;border-radius:7px;font-size:13px;line-height:2;color:#ccc;margin:20px 0}
-.price-summary strong{color:white}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.form-grid input{width:100%;min-width:0}
-.full{grid-column:1/-1}
-#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#252525;border:1px solid #555;padding:14px 20px;border-radius:6px;z-index:50;display:none;font-size:13px;max-width:90%}
-
-@media(max-width:850px){
- .matches{grid-template-columns:repeat(2,1fr)}
- .teams-grid{grid-template-columns:repeat(3,1fr)}
-}
-@media(max-width:600px){
- nav{padding:0 5%}
- .menu-btn{display:block}
- .navlinks{display:none;position:absolute;top:72px;left:0;right:0;background:#111;padding:20px;flex-direction:column}
- .navlinks.open{display:flex}
- .hero{padding:70px 7%}
- .section{padding:45px 6%}
- .matches,.grid3{grid-template-columns:1fr}
- .teams-grid{grid-template-columns:repeat(2,1fr)}
- .stats{padding:20px 4%}
- .stat strong{font-size:20px}
- .guidelines{grid-template-columns:1fr}
- .map-layout{grid-template-rows:auto 105px auto;gap:5px}
- .map-stand{padding:7px 2px}
- .map-stand strong{font-size:9px}
- .map-stand small{font-size:8px}
- .pitch strong{font-size:9px}
- .seat-grid{gap:5px}
- .seat{min-height:34px;font-size:10px}
- .modal{padding:8px}
- .modal-box{padding:20px 13px}
- .form-grid{grid-template-columns:1fr}
- .full{grid-column:auto}
- .section-heading{align-items:start;flex-direction:column}
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPL Ticket Booking</title>
 </head>
-
 <body>
 
-<nav>
- <a href="#" class="logo">STADIUM<span>X</span></a>
- <button class="menu-btn" onclick="document.querySelector('.navlinks').classList.toggle('open')">☰</button>
- <div class="navlinks">
-  <a href="#home">Home</a>
-  <a href="#about">About</a>
-  <a href="#matches">Matches</a>
-  <a href="#teams">Teams</a>
-  <a href="#bookings">My Bookings</a>
- </div>
-</nav>
-
-<header class="hero" id="home">
- <div class="hero-content">
-  <div class="tag">THE IPL EXPERIENCE STARTS HERE</div>
-  <h1>FEEL THE GAME.<br><span>LIVE THE MOMENT.</span></h1>
-  <p>Your gateway to unforgettable cricket experiences. Discover matches, choose your seats and experience the energy of the stadium.</p>
-  <a href="#matches" class="btn">EXPLORE MATCHES →</a>
-  <a href="#about" class="btn btn-outline">DISCOVER MORE</a>
- </div>
-</header>
-
-<div class="stats">
- <div class="stat"><strong>10</strong><span>FRANCHISES</span></div>
- <div class="stat"><strong>74</strong><span>MATCHES</span></div>
- <div class="stat"><strong>1</strong><span>PASSION FOR CRICKET</span></div>
-</div>
-
-<section class="section" id="about">
- <div class="eyebrow">WELCOME TO STADIUMX</div>
- <h2>More than just a ticket.</h2>
- <p style="color:#aaa">Your match day experience begins here.</p>
- <div class="grid3" style="margin-top:25px">
-  <div class="info-card"><div class="card-icon">🏏</div><h3>Every Match</h3><p>Explore IPL fixtures and discover your favourite teams.</p></div>
-  <div class="info-card"><div class="card-icon">🎟️</div><h3>Easy Booking</h3><p>Choose a stadium stand and select your preferred seats.</p></div>
-  <div class="info-card"><div class="card-icon">⚡</div><h3>Instant Summary</h3><p>Review your seats and demo ticket price before confirming.</p></div>
- </div>
-</section>
-
-<section class="section" id="matches">
- <div class="eyebrow">THE FIXTURES</div>
- <div class="section-heading">
-  <div><h2>IPL 2026 Matches</h2><p>Find your match. Pick your side. Be there.</p></div>
-  <span id="matchCount"></span>
- </div>
- <div class="filterbar">
-  <input id="searchMatch" placeholder="Search team or stadium..." oninput="renderMatches()">
-  <select id="teamFilter" onchange="renderMatches()">
-   <option value="">All teams</option>
-   <option>Royal Challengers Bengaluru</option>
-   <option>Chennai Super Kings</option>
-   <option>Mumbai Indians</option>
-   <option>Kolkata Knight Riders</option>
-   <option>Sunrisers Hyderabad</option>
-   <option>Rajasthan Royals</option>
-   <option>Punjab Kings</option>
-   <option>Delhi Capitals</option>
-   <option>Gujarat Titans</option>
-   <option>Lucknow Super Giants</option>
-  </select>
- </div>
- <div class="matches" id="matchesList"></div>
-</section>
-
-<section class="section" id="teams">
- <div class="eyebrow">THE FRANCHISES</div>
- <h2>10 Teams. One League.</h2>
- <div class="teams-grid" id="teamsGrid" style="margin-top:25px"></div>
-</section>
-
-<section class="section" id="bookings" style="background:#111">
- <div class="eyebrow">YOUR TICKETS</div>
- <h2>My Bookings</h2>
- <p style="color:#aaa;margin:10px 0 25px">Your bookings are saved in this browser.</p>
- <div class="booking-panel" id="bookingContent">No bookings yet. Explore matches to book your first demo ticket.</div>
-</section>
-
-<section class="section">
- <div class="eyebrow">MATCH DAY INFORMATION</div>
- <h2>Stadium Guidelines</h2>
- <div class="guidelines" style="margin-top:25px">
-  <div class="guideline">🎫 Carry a valid ticket and identity document.</div>
-  <div class="guideline">🚫 Outside food and prohibited objects may not be permitted.</div>
-  <div class="guideline">🕒 Arrive early to complete security checks.</div>
-  <div class="guideline">📱 Keep your booking confirmation accessible.</div>
-  <div class="guideline">♻️ Use designated waste bins and keep the stadium clean.</div>
-  <div class="guideline">👮 Follow stadium staff instructions.</div>
- </div>
-</section>
-
-<footer>
- <strong>STADIUMX</strong><br>
- FEEL THE GAME. LIVE THE MOMENT.<br>
- © 2026 StadiumX. Student HTML project. Not affiliated with IPL or BCCI.<br>
- All ticket prices and booking features are simulated.
-</footer>
-
-<!-- BOOKING MODAL -->
-<div class="modal" id="bookingModal">
- <div class="modal-box">
-  <button class="close" onclick="closeModal()">×</button>
-  <div class="eyebrow">BOOK YOUR EXPERIENCE</div>
-  <h2 id="modalMatchTitle">Select your seats</h2>
-  <p class="sub" id="modalMatchInfo"></p>
-
-  <h3 class="step-title">1. Select your stadium stand</h3>
-  <p class="sub">Choose a section on the stadium map below.</p>
-
-  <div class="stadium-map">
-   <div class="map-label" id="stadiumTitle">STADIUM SEATING PLAN · TOP VIEW</div>
-   <div class="map-layout" id="mapLayout"></div>
-  </div>
-
-  <h3 class="step-title">2. Choose your seats</h3>
-  <div class="seat-heading">
-   <span id="seatStandLabel">North Stand</span>
-   <span id="seatAvailability"></span>
-  </div>
-
-  <div class="legend">
-   <span><i></i> Available</span>
-   <span><i class="chosen"></i> Selected by you</span>
-   <span><i class="occupied"></i> Already booked</span>
-  </div>
-
-  <div class="seat-grid" id="seatGrid"></div>
-  <div class="price-summary" id="priceSummary"></div>
-
-  <h3 class="step-title">3. Enter your details</h3>
-  <form id="bookingForm">
-   <div class="form-grid">
-    <input id="customerName" type="text" placeholder="Full name" required>
-    <input id="customerEmail" type="email" placeholder="Email address" required>
-    <input id="customerPhone" type="tel" placeholder="10-digit mobile number" pattern="[0-9]{10}" maxlength="10" required>
-    <button class="btn full" type="submit">CONFIRM DEMO BOOKING</button>
-   </div>
-  </form>
-  <p style="color:#888;font-size:11px;margin-top:15px">Demo only. No real payment is collected and no official ticket is issued.</p>
- </div>
-</div>
-
-<div id="toast"></div>
-
-<script>
-
-// IPL 2026 fixture list used for the student project.
-const fixtureData = `
-28 Mar 2026|7:30 PM|Royal Challengers Bengaluru|Sunrisers Hyderabad|Bengaluru
-29 Mar 2026|7:30 PM|Mumbai Indians|Kolkata Knight Riders|Mumbai
-30 Mar 2026|7:30 PM|Rajasthan Royals|Chennai Super Kings|Guwahati
-31 Mar 2026|7:30 PM|Punjab Kings|Gujarat Titans|New Chandigarh
-01 Apr 2026|7:30 PM|Lucknow Super Giants|Delhi Capitals|Lucknow
-02 Apr 2026|7:30 PM|Kolkata Knight Riders|Sunrisers Hyderabad|Kolkata
-03 Apr 2026|7:30 PM|Chennai Super Kings|Punjab Kings|Chennai
-04 Apr 2026|3:30 PM|Delhi Capitals|Mumbai Indians|Delhi
-04 Apr 2026|7:30 PM|Gujarat Titans|Rajasthan Royals|Ahmedabad
-05 Apr 2026|3:30 PM|Sunrisers Hyderabad|Lucknow Super Giants|Hyderabad
-05 Apr 2026|7:30 PM|Royal Challengers Bengaluru|Chennai Super Kings|Bengaluru
-06 Apr 2026|7:30 PM|Kolkata Knight Riders|Punjab Kings|Kolkata
-07 Apr 2026|7:30 PM|Rajasthan Royals|Mumbai Indians|Guwahati
-08 Apr 2026|7:30 PM|Delhi Capitals|Gujarat Titans|Delhi
-09 Apr 2026|7:30 PM|Kolkata Knight Riders|Lucknow Super Giants|Kolkata
-10 Apr 2026|7:30 PM|Rajasthan Royals|Royal Challengers Bengaluru|Guwahati
-11 Apr 2026|3:30 PM|Punjab Kings|Sunrisers Hyderabad|New Chandigarh
-11 Apr 2026|7:30 PM|Chennai Super Kings|Delhi Capitals|Chennai
-12 Apr 2026|3:30 PM|Lucknow Super Giants|Gujarat Titans|Lucknow
-12 Apr 2026|7:30 PM|Mumbai Indians|Royal Challengers Bengaluru|Mumbai
-13 Apr 2026|7:30 PM|Sunrisers Hyderabad|Rajasthan Royals|Hyderabad
-14 Apr 2026|7:30 PM|Chennai Super Kings|Kolkata Knight Riders|Chennai
-15 Apr 2026|7:30 PM|Royal Challengers Bengaluru|Lucknow Super Giants|Bengaluru
-16 Apr 2026|7:30 PM|Mumbai Indians|Punjab Kings|Mumbai
-17 Apr 2026|7:30 PM|Gujarat Titans|Kolkata Knight Riders|Ahmedabad
-18 Apr 2026|3:30 PM|Royal Challengers Bengaluru|Delhi Capitals|Bengaluru
-18 Apr 2026|7:30 PM|Sunrisers Hyderabad|Chennai Super Kings|Hyderabad
-19 Apr 2026|3:30 PM|Kolkata Knight Riders|Rajasthan Royals|Kolkata
-19 Apr 2026|7:30 PM|Punjab Kings|Lucknow Super Giants|New Chandigarh
-20 Apr 2026|7:30 PM|Gujarat Titans|Mumbai Indians|Ahmedabad
-21 Apr 2026|7:30 PM|Sunrisers Hyderabad|Delhi Capitals|Hyderabad
-22 Apr 2026|7:30 PM|Lucknow Super Giants|Rajasthan Royals|Lucknow
-23 Apr 2026|7:30 PM|Mumbai Indians|Chennai Super Kings|Mumbai
-24 Apr 2026|7:30 PM|Royal Challengers Bengaluru|Gujarat Titans|Bengaluru
-25 Apr 2026|3:30 PM|Delhi Capitals|Punjab Kings|Delhi
-25 Apr 2026|7:30 PM|Rajasthan Royals|Sunrisers Hyderabad|Jaipur
-26 Apr 2026|3:30 PM|Gujarat Titans|Chennai Super Kings|Ahmedabad
-26 Apr 2026|7:30 PM|Lucknow Super Giants|Kolkata Knight Riders|Lucknow
-27 Apr 2026|7:30 PM|Delhi Capitals|Royal Challengers Bengaluru|Delhi
-28 Apr 2026|7:30 PM|Punjab Kings|Rajasthan Royals|New Chandigarh
-29 Apr 2026|7:30 PM|Mumbai Indians|Sunrisers Hyderabad|Mumbai
-30 Apr 2026|7:30 PM|Gujarat Titans|Royal Challengers Bengaluru|Ahmedabad
-01 May 2026|7:30 PM|Rajasthan Royals|Delhi Capitals|Jaipur
-02 May 2026|7:30 PM|Chennai Super Kings|Mumbai Indians|Chennai
-03 May 2026|3:30 PM|Sunrisers Hyderabad|Kolkata Knight Riders|Hyderabad
-03 May 2026|7:30 PM|Gujarat Titans|Punjab Kings|Ahmedabad
-04 May 2026|7:30 PM|Mumbai Indians|Lucknow Super Giants|Mumbai
-05 May 2026|7:30 PM|Delhi Capitals|Chennai Super Kings|Delhi
-06 May 2026|7:30 PM|Sunrisers Hyderabad|Punjab Kings|Hyderabad
-07 May 2026|7:30 PM|Lucknow Super Giants|Royal Challengers Bengaluru|Lucknow
-08 May 2026|7:30 PM|Delhi Capitals|Kolkata Knight Riders|Delhi
-09 May 2026|7:30 PM|Rajasthan Royals|Gujarat Titans|Jaipur
-10 May 2026|3:30 PM|Chennai Super Kings|Lucknow Super Giants|Chennai
-10 May 2026|7:30 PM|Royal Challengers Bengaluru|Mumbai Indians|Raipur
-11 May 2026|7:30 PM|Punjab Kings|Delhi Capitals|Dharamshala
-12 May 2026|7:30 PM|Gujarat Titans|Sunrisers Hyderabad|Ahmedabad
-13 May 2026|7:30 PM|Royal Challengers Bengaluru|Kolkata Knight Riders|Raipur
-14 May 2026|7:30 PM|Punjab Kings|Mumbai Indians|Dharamshala
-15 May 2026|7:30 PM|Lucknow Super Giants|Chennai Super Kings|Lucknow
-16 May 2026|7:30 PM|Kolkata Knight Riders|Gujarat Titans|Kolkata
-17 May 2026|3:30 PM|Punjab Kings|Royal Challengers Bengaluru|Dharamshala
-17 May 2026|7:30 PM|Delhi Capitals|Rajasthan Royals|Delhi
-18 May 2026|7:30 PM|Chennai Super Kings|Sunrisers Hyderabad|Chennai
-19 May 2026|7:30 PM|Rajasthan Royals|Lucknow Super Giants|Jaipur
-20 May 2026|7:30 PM|Kolkata Knight Riders|Mumbai Indians|Kolkata
-21 May 2026|7:30 PM|Chennai Super Kings|Gujarat Titans|Chennai
-22 May 2026|7:30 PM|Sunrisers Hyderabad|Royal Challengers Bengaluru|Hyderabad
-23 May 2026|7:30 PM|Lucknow Super Giants|Punjab Kings|Lucknow
-24 May 2026|3:30 PM|Mumbai Indians|Rajasthan Royals|Mumbai
-24 May 2026|7:30 PM|Kolkata Knight Riders|Delhi Capitals|Kolkata
-`.trim();
-
-const playoffData=[
- {date:"26 May 2026",time:"7:30 PM",home:"Royal Challengers Bengaluru",away:"Gujarat Titans",venue:"Dharamshala",stage:"Qualifier 1"},
- {date:"27 May 2026",time:"7:30 PM",home:"Sunrisers Hyderabad",away:"Rajasthan Royals",venue:"New Chandigarh",stage:"Eliminator"},
- {date:"29 May 2026",time:"7:30 PM",home:"Gujarat Titans",away:"Rajasthan Royals",venue:"New Chandigarh",stage:"Qualifier 2"},
- {date:"31 May 2026",time:"7:30 PM",home:"Royal Challengers Bengaluru",away:"Gujarat Titans",venue:"Ahmedabad",stage:"Final"}
-];
-
-const matches=fixtureData.split("\n").map((line,i)=>{
- const [date,time,home,away,venue]=line.split("|");
- return {id:i+1,date,time,home,away,venue,stage:"League Match"};
-}).concat(playoffData.map((m,i)=>({...m,id:71+i})));
-
-const teams=[
- ["RCB","Royal Challengers Bengaluru"],
- ["CSK","Chennai Super Kings"],
- ["MI","Mumbai Indians"],
- ["KKR","Kolkata Knight Riders"],
- ["SRH","Sunrisers Hyderabad"],
- ["RR","Rajasthan Royals"],
- ["PBKS","Punjab Kings"],
- ["DC","Delhi Capitals"],
- ["GT","Gujarat Titans"],
- ["LSG","Lucknow Super Giants"]
-];
-
-// Different stadiums, stand names and illustrative prices.
-const stadiumConfigs={
-
- Bengaluru:{
-  title:"M. Chinnaswamy Stadium",
-  stands:[
-   ["North Stand",1200,"north"],
-   ["East Stand",1800,"east"],
-   ["South Stand",1200,"south"],
-   ["West Stand",1800,"west"],
-   ["Pavilion",4500,"vip"],
-   ["Grand Stand",5500,"premium"]
-  ]
- },
-
- Mumbai:{
-  title:"Wankhede Stadium",
-  stands:[
-   ["North Stand",1500,"north"],
-   ["Garware Pavilion",6000,"vip"],
-   ["South Stand",1500,"south"],
-   ["West Stand",2200,"west"],
-   ["East Stand",2200,"east"],
-   ["Grand Stand",4500,"premium"]
-  ]
- },
-
- Chennai:{
-  title:"M. A. Chidambaram Stadium",
-  stands:[
-   ["C Stand",900,"north"],
-   ["D Stand",1200,"east"],
-   ["E Stand",1200,"south"],
-   ["KMK Terrace",3000,"west"],
-   ["VIP Pavilion",5000,"vip"],
-   ["Premium Gallery",4000,"premium"]
-  ]
- },
-
- Kolkata:{
-  title:"Eden Gardens",
-  stands:[
-   ["Block B",1000,"north"],
-   ["Block C",1200,"east"],
-   ["Block D",1200,"south"],
-   ["West Stand",1800,"west"],
-   ["Club House",5500,"vip"],
-   ["Premium Gallery",4000,"premium"]
-  ]
- },
-
- Hyderabad:{
-  title:"Rajiv Gandhi International Cricket Stadium",
-  stands:[
-   ["North Stand",1000,"north"],
-   ["East Stand",1500,"east"],
-   ["South Stand",1000,"south"],
-   ["West Stand",1800,"west"],
-   ["Pavilion",3500,"vip"],
-   ["Premium Stand",4500,"premium"]
-  ]
- },
-
- Ahmedabad:{
-  title:"Narendra Modi Stadium",
-  stands:[
-   ["North Stand",1200,"north"],
-   ["East Stand",1800,"east"],
-   ["South Stand",1200,"south"],
-   ["West Stand",1800,"west"],
-   ["Premium Gallery",4500,"premium"],
-   ["VIP Pavilion",6000,"vip"]
-  ]
- },
-
- Jaipur:{
-  title:"Sawai Mansingh Stadium",
-  stands:[
-   ["North Stand",900,"north"],
-   ["East Stand",1300,"east"],
-   ["South Stand",900,"south"],
-   ["West Stand",1500,"west"],
-   ["Royal Pavilion",4000,"vip"],
-   ["Premium Stand",2800,"premium"]
-  ]
- },
-
- Lucknow:{
-  title:"Ekana Cricket Stadium",
-  stands:[
-   ["North Stand",1000,"north"],
-   ["East Stand",1500,"east"],
-   ["South Stand",1000,"south"],
-   ["West Stand",1500,"west"],
-   ["Corporate Pavilion",3500,"premium"],
-   ["VIP Gallery",4500,"vip"]
-  ]
- },
-
- "New Chandigarh":{
-  title:"New International Cricket Stadium",
-  stands:[
-   ["North Stand",1000,"north"],
-   ["East Stand",1500,"east"],
-   ["South Stand",1000,"south"],
-   ["West Stand",1500,"west"],
-   ["Pavilion",3500,"vip"],
-   ["Premium Gallery",4500,"premium"]
-  ]
- },
-
- Dharamshala:{
-  title:"HPCA Stadium",
-  stands:[
-   ["North Gallery",1000,"north"],
-   ["East Gallery",1500,"east"],
-   ["South Gallery",1000,"south"],
-   ["West Gallery",1500,"west"],
-   ["Mountain View Pavilion",4000,"vip"],
-   ["Premium Stand",3000,"premium"]
-  ]
- },
-
- Raipur:{
-  title:"Shaheed Veer Narayan Singh Stadium",
-  stands:[
-   ["North Stand",1000,"north"],
-   ["East Stand",1400,"east"],
-   ["South Stand",1000,"south"],
-   ["West Stand",1400,"west"],
-   ["VIP Pavilion",4000,"vip"],
-   ["Premium Stand",3000,"premium"]
-  ]
- },
-
- Guwahati:{
-  title:"ACA Stadium",
-  stands:[
-   ["North Stand",900,"north"],
-   ["East Stand",1300,"east"],
-   ["South Stand",900,"south"],
-   ["West Stand",1300,"west"],
-   ["VIP Pavilion",3500,"vip"],
-   ["Premium Gallery",2800,"premium"]
-  ]
- },
-
- Delhi:{
-  title:"Arun Jaitley Stadium",
-  stands:[
-   ["North Stand",1000,"north"],
-   ["East Stand",1500,"east"],
-   ["South Stand",1000,"south"],
-   ["West Stand",1500,"west"],
-   ["Club House",4500,"vip"],
-   ["Premium Gallery",3500,"premium"]
-  ]
- }
-};
-
-function getStadiumConfig(venue){
- return stadiumConfigs[venue]||stadiumConfigs.Bengaluru;
-}
-
-function shortName(name){
- return teams.find(t=>t[1]===name)?.[0]||name.slice(0,3).toUpperCase();
-}
-
-// MATCH SEARCH AND FILTER
-function renderMatches(){
- const search=document.getElementById("searchMatch").value.toLowerCase();
- const filter=document.getElementById("teamFilter").value;
-
- const filtered=matches.filter(m=>
-  (m.home+" "+m.away+" "+m.venue+" "+m.date).toLowerCase().includes(search)&&
-  (!filter||m.home===filter||m.away===filter)
- );
-
- document.getElementById("matchCount").textContent=filtered.length+" matches";
-
- const list=document.getElementById("matchesList");
-
- if(!filtered.length){
-  list.innerHTML='<div style="color:#aaa;padding:30px">No matches found.</div>';
-  return;
- }
-
- list.innerHTML=filtered.map(m=>`
-  <article class="match-card">
-   <div class="match-top">
-    <span>MATCH ${m.id} · ${m.stage}</span>
-    <span>2026</span>
-   </div>
-
-   <div class="teams">
-    <div class="team">
-     <div class="team-logo">${shortName(m.home)}</div>
-     <div class="team-name">${m.home}</div>
-    </div>
-
-    <div class="vs">VS</div>
-
-    <div class="team">
-     <div class="team-logo">${shortName(m.away)}</div>
-     <div class="team-name">${m.away}</div>
-    </div>
-   </div>
-
-   <div class="match-info">
-    📅 ${m.date} · ${m.time}<br>
-    📍 ${m.venue}<br>
-    🏟️ ${m.stage}
-   </div>
-
-   <button class="btn" style="width:100%;margin-top:15px"
-   onclick="openBooking(${m.id})">BOOK DEMO TICKETS →</button>
-  </article>
- `).join("");
-}
-
-// TEAM CARDS
-document.getElementById("teamsGrid").innerHTML=teams.map(t=>`
- <div class="team-box">
-  <div class="team-logo">${t[0]}</div>
-  <strong>${t[1]}</strong>
-  <span>IPL Franchise</span>
- </div>
-`).join("");
-
-// LOCAL STORAGE
-function getBookings(){
- try{
-  return JSON.parse(localStorage.getItem("stadiumXBookings")||"[]");
- }catch(error){
-  return [];
- }
-}
-
-function saveBookings(data){
- localStorage.setItem("stadiumXBookings",JSON.stringify(data));
-}
-
-// BOOKING VARIABLES
-let currentMatch=null;
-let selectedStand="";
-let selectedSeats=[];
-
-// CHECK WHETHER A SEAT IS ALREADY BOOKED
-function isSeatBooked(matchId,stand,seatNumber){
- return getBookings().some(b=>
-  b.matchId===matchId&&
-  b.stand===stand&&
-  b.seats.includes("S"+seatNumber)
- );
-}
-
-// OPEN BOOKING WINDOW
-function openBooking(id){
- currentMatch=matches.find(m=>m.id===id);
- selectedSeats=[];
-
- const config=getStadiumConfig(currentMatch.venue);
- selectedStand=config.stands[0][0];
-
- document.getElementById("modalMatchTitle").textContent=
-  currentMatch.home+" vs "+currentMatch.away;
-
- document.getElementById("modalMatchInfo").textContent=
-  currentMatch.date+" · "+currentMatch.time+" · "+config.title;
-
- renderStadiumMap();
- renderSeats();
- updateSummary();
-
- document.getElementById("bookingModal").classList.add("show");
-}
-
-// CLOSE BOOKING WINDOW
-function closeModal(){
- document.getElementById("bookingModal").classList.remove("show");
-}
-
-// CREATE CITY-SPECIFIC STADIUM MAP
-function renderStadiumMap(){
- const config=getStadiumConfig(currentMatch.venue);
- const layout=document.getElementById("mapLayout");
-
- document.getElementById("stadiumTitle").textContent=
-  config.title.toUpperCase()+" · TOP VIEW";
-
- layout.innerHTML=`
-  ${config.stands.map(stand=>`
-   <button class="map-stand ${stand[2]} ${stand[0]===selectedStand?"active":""}"
-   onclick="selectStand('${stand[0]}',this)">
-    <strong>${stand[0]}</strong>
-    <small>₹${stand[1].toLocaleString("en-IN")} / seat</small>
-   </button>
-  `).join("")}
-
-  <div class="pitch">
-   <strong>CRICKET PITCH</strong>
-   <div class="pitch-line"></div>
-   <small>FIELD OF PLAY</small>
-  </div>
- `;
-}
-
-// SELECT STADIUM STAND
-function selectStand(name,button){
- selectedStand=name;
- selectedSeats=[];
-
- document.querySelectorAll(".map-stand")
- .forEach(s=>s.classList.remove("active"));
-
- button.classList.add("active");
-
- renderSeats();
- updateSummary();
-}
-
-// GET CURRENT STAND PRICE
-function getCurrentPrice(){
- const config=getStadiumConfig(currentMatch.venue);
- const stand=config.stands.find(s=>s[0]===selectedStand);
- return stand?stand[1]:1000;
-}
-
-// DISPLAY ALL 32 SEATS
-function renderSeats(){
- const grid=document.getElementById("seatGrid");
- grid.innerHTML="";
-
- document.getElementById("seatStandLabel").textContent=selectedStand;
-
- let available=0;
- let booked=0;
-
- for(let i=1;i<=32;i++){
-  const seat=document.createElement("button");
-  seat.className="seat";
-  seat.textContent="S"+i;
-
-  if(isSeatBooked(currentMatch.id,selectedStand,i)){
-   seat.classList.add("taken");
-   seat.disabled=true;
-   seat.title="Already booked";
-   booked++;
-  }else{
-   available++;
-
-   if(selectedSeats.includes(i)){
-    seat.classList.add("selected");
-   }
-
-   seat.onclick=()=>{
-    if(selectedSeats.includes(i)){
-     selectedSeats=selectedSeats.filter(x=>x!==i);
-    }else if(selectedSeats.length<6){
-     selectedSeats.push(i);
-    }else{
-     showToast("Maximum 6 seats per booking.");
-    }
-
-    renderSeats();
-    updateSummary();
-   };
-  }
-
-  grid.appendChild(seat);
- }
-
- document.getElementById("seatAvailability").textContent=
-  available+" available · "+booked+" booked";
-}
-
-// UPDATE PRICE SUMMARY
-function updateSummary(){
- const price=getCurrentPrice();
- const total=selectedSeats.length*price;
-
- document.getElementById("priceSummary").innerHTML=`
-  Selected stand: <strong>${selectedStand}</strong><br>
-  Selected seats: <strong>${selectedSeats.length?selectedSeats.map(s=>"S"+s).join(", "):"None"}</strong><br>
-  Price per seat: <strong>₹${price.toLocaleString("en-IN")}</strong><br>
-  Total amount: <strong style="color:#ff5965;font-size:19px">₹${total.toLocaleString("en-IN")}</strong>
- `;
-}
-
-// CONFIRM BOOKING
-document.getElementById("bookingForm").addEventListener("submit",function(e){
- e.preventDefault();
-
- if(!selectedSeats.length){
-  showToast("Please select at least one seat.");
-  return;
- }
-
- // Check again before saving the booking.
- const conflict=selectedSeats.some(s=>
-  isSeatBooked(currentMatch.id,selectedStand,s)
- );
-
- if(conflict){
-  selectedSeats=selectedSeats.filter(s=>
-   !isSeatBooked(currentMatch.id,selectedStand,s)
-  );
-
-  renderSeats();
-  updateSummary();
-
-  showToast("A selected seat is no longer available. Choose again.");
-  return;
- }
-
- const booking={
-  reference:"SX"+Date.now().toString().slice(-8),
-  matchId:currentMatch.id,
-  name:document.getElementById("customerName").value.trim(),
-  email:document.getElementById("customerEmail").value.trim(),
-  phone:document.getElementById("customerPhone").value.trim(),
-  match:currentMatch.home+" vs "+currentMatch.away,
-  date:currentMatch.date,
-  venue:currentMatch.venue,
-  stand:selectedStand,
-  seats:selectedSeats.map(s=>"S"+s),
-  total:selectedSeats.length*getCurrentPrice()
- };
-
- const bookings=getBookings();
- bookings.push(booking);
- saveBookings(bookings);
-
- this.reset();
- closeModal();
- renderBookings();
-
- showToast("Demo booking confirmed! Reference: "+booking.reference);
-
- document.getElementById("bookings").scrollIntoView({behavior:"smooth"});
-});
-
-// SHOW MY BOOKINGS
-function renderBookings(){
- const bookings=getBookings();
- const content=document.getElementById("bookingContent");
-
- if(!bookings.length){
-  content.innerHTML="No bookings yet. Explore matches to book your first demo ticket.";
-  return;
- }
-
- content.innerHTML=`
-  <div style="overflow-x:auto">
-   <table class="booking-table">
-    <thead>
-     <tr>
-      <th>REFERENCE</th>
-      <th>MATCH</th>
-      <th>DATE</th>
-      <th>STAND / SEATS</th>
-      <th>TOTAL</th>
-      <th>ACTION</th>
-     </tr>
-    </thead>
-    <tbody>
-     ${bookings.map((b,i)=>`
-      <tr>
-       <td>${b.reference}</td>
-       <td>${b.match}<br><small style="color:#888">${b.venue}</small></td>
-       <td>${b.date}</td>
-       <td>${b.stand}<br>${b.seats.join(", ")}</td>
-       <td>₹${b.total.toLocaleString("en-IN")}</td>
-       <td><button class="cancel-btn" onclick="cancelBooking(${i})">Cancel</button></td>
-      </tr>
-     `).join("")}
-    </tbody>
-   </table>
-  </div>
- `;
-}
-
-// CANCEL BOOKING AND RELEASE SEATS
-function cancelBooking(index){
- if(!confirm("Cancel this demo booking and release the seats?"))return;
-
- const bookings=getBookings();
- bookings.splice(index,1);
- saveBookings(bookings);
-
- renderBookings();
- showToast("Booking cancelled. Seats are available again.");
-}
-
-// TOAST MESSAGE
-function showToast(message){
- const toast=document.getElementById("toast");
- toast.textContent=message;
- toast.style.display="block";
-
- setTimeout(()=>{
-  toast.style.display="none";
- },3000);
-}
-
-// UPDATE OPEN SEAT MAP WHEN ANOTHER TAB CHANGES BOOKINGS
-window.addEventListener("storage",function(event){
- if(event.key==="stadiumXBookings"){
-  renderBookings();
-  if(currentMatch){
-   renderSeats();
-   updateSummary();
-  }
- }
-});
-
-// INITIALISE WEBSITE
-renderMatches();
-renderBookings();
-
-</script>
+    <!-- Navigation -->
+    <header>
+        <h1>IPL Ticket Booking</h1>
+        <nav>
+            <a href="#matches">Matches</a> |
+            <a href="#booking">Book Ticket</a> |
+            <a href="#mybookings">My Bookings</a> |
+            <a href="#guidelines">Guidelines</a>
+        </nav>
+    </header>
+
+    <hr>
+
+    <!-- Hero Section -->
+    <section>
+        <h2>Experience The Stadium Energy Live!</h2>
+        <p>Book your tickets and experience the excitement of IPL 2026.</p>
+        <a href="#matches">View Schedule</a>
+        <a href="#booking">Book Ticket</a>
+    </section>
+
+    <hr>
+
+    <!-- About IPL -->
+    <section id="about">
+        <h2>About IPL 2026</h2>
+        <p>
+            The Indian Premier League (IPL) is a professional Twenty20
+            cricket league featuring exciting matches between different teams.
+        </p>
+
+        <h3>Popular Teams</h3>
+        <ul>
+            <li>Royal Challengers Bengaluru</li>
+            <li>Mumbai Indians</li>
+            <li>Chennai Super Kings</li>
+            <li>Kolkata Knight Riders</li>
+            <li>Sunrisers Hyderabad</li>
+            <li>Rajasthan Royals</li>
+            <li>Delhi Capitals</li>
+            <li>Punjab Kings</li>
+            <li>Gujarat Titans</li>
+            <li>Lucknow Super Giants</li>
+        </ul>
+
+        <h3>Major Venues</h3>
+        <ul>
+            <li>M. Chinnaswamy Stadium, Bengaluru</li>
+            <li>Wankhede Stadium, Mumbai</li>
+            <li>M. A. Chidambaram Stadium, Chennai</li>
+            <li>Eden Gardens, Kolkata</li>
+            <li>Narendra Modi Stadium, Ahmedabad</li>
+        </ul>
+    </section>
+
+    <hr>
+
+    <!-- Match Schedule -->
+    <section id="matches">
+        <h2>Match Schedule</h2>
+
+        <label for="teamFilter">Filter by Team:</label>
+        <select id="teamFilter">
+            <option>All Teams</option>
+            <option>Royal Challengers Bengaluru</option>
+            <option>Mumbai Indians</option>
+            <option>Chennai Super Kings</option>
+            <option>Kolkata Knight Riders</option>
+            <option>Sunrisers Hyderabad</option>
+        </select>
+
+        <table border="1" cellpadding="8">
+            <tr>
+                <th>Match Number</th>
+                <th>Teams</th>
+                <th>Date & Time</th>
+                <th>Venue</th>
+                <th>General Price</th>
+                <th>Premium Price</th>
+                <th>VIP Price</th>
+                <th>Action</th>
+            </tr>
+
+            <tr>
+                <td>1</td>
+                <td>RCB vs CSK</td>
+                <td>10 April 2026, 7:30 PM</td>
+                <td>Bengaluru</td>
+                <td>₹800</td>
+                <td>₹2000</td>
+                <td>₹5000</td>
+                <td><a href="#booking">Book</a></td>
+            </tr>
+
+            <tr>
+                <td>2</td>
+                <td>MI vs KKR</td>
+                <td>11 April 2026, 7:30 PM</td>
+                <td>Mumbai</td>
+                <td>₹1000</td>
+                <td>₹2500</td>
+                <td>₹6000</td>
+                <td><a href="#booking">Book</a></td>
+            </tr>
+
+            <tr>
+                <td>3</td>
+                <td>CSK vs SRH</td>
+                <td>12 April 2026, 3:30 PM</td>
+                <td>Chennai</td>
+                <td>₹700</td>
+                <td>₹1800</td>
+                <td>₹4500</td>
+                <td><a href="#booking">Book</a></td>
+            </tr>
+        </table>
+        <p><small>Note: Match details and ticket prices are sample data for this project.</small></p>
+    </section>
+
+    <hr>
+
+    <!-- Ticket Booking Form -->
+    <section id="booking">
+        <h2>Book Your Ticket</h2>
+
+        <form>
+            <label for="match">Select Match:</label><br>
+            <select id="match" name="match">
+                <option>RCB vs CSK</option>
+                <option>MI vs KKR</option>
+                <option>CSK vs SRH</option>
+            </select>
+            <br><br>
+
+            <label for="stand">Stand Category:</label><br>
+            <select id="stand" name="stand">
+                <option>General</option>
+                <option>Premium</option>
+                <option>VIP</option>
+            </select>
+            <br><br>
+
+            <label for="quantity">Number of Tickets:</label><br>
+            <input type="number" id="quantity" name="quantity" min="1" max="10">
+            <br><br>
+
+            <label for="name">Full Name:</label><br>
+            <input type="text" id="name" name="name" required>
+            <br><br>
+
+            <label for="email">Email Address:</label><br>
+            <input type="email" id="email" name="email" required>
+            <br><br>
+
+            <label for="phone">Phone Number:</label><br>
+            <input type="tel" id="phone" name="phone" required>
+            <br><br>
+
+            <button type="submit">Confirm Booking</button>
+        </form>
+
+        <h3>Booking Summary</h3>
+        <p>Selected Match: Not Selected</p>
+        <p>Stand Category: Not Selected</p>
+        <p>Ticket Price: ₹0</p>
+        <p>Quantity: 0</p>
+        <p>Total Amount: ₹0</p>
+    </section>
+
+    <hr>
+
+    <!-- My Bookings -->
+    <section id="mybookings">
+        <h2>My Ticket Bookings</h2>
+
+        <table border="1" cellpadding="8">
+            <tr>
+                <th>Booking ID</th>
+                <th>Name</th>
+                <th>Match</th>
+                <th>Stand</th>
+                <th>Tickets</th>
+                <th>Total Amount</th>
+            </tr>
+        </table>
+
+        <p>No bookings available yet.</p>
+    </section>
+
+    <hr>
+
+    <!-- Guidelines -->
+    <section id="guidelines">
+        <h2>Ticket Booking Guidelines</h2>
+
+        <h3>Ticket Verification</h3>
+        <p>Carry your valid ticket for verification at the stadium entrance.</p>
+
+        <h3>ID Proof Requirement</h3>
+        <p>Carry a valid government-issued identity card.</p>
+
+        <h3>Prohibited Items</h3>
+        <p>Outside food, dangerous objects and prohibited items are not allowed inside the stadium.</p>
+    </section>
+
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 IPL Ticket Booking. All Rights Reserved.</p>
+    </footer>
+
 </body>
 </html>
