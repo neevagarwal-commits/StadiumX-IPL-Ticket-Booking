@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StadiumX | Ticket Booking</title>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <header>
+        <h1>StadiumX</h1>
+
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="index.html#matches">Matches</a>
+            <a href="index.html#guidelines">Guidelines</a>
+        </nav>
+    </header>
+
+    <!-- Booking Section -->
+    <section id="booking">
+
+        <h2>Book Your IPL Tickets</h2>
+
+        <p>Fill in the details below to book your tickets.</p>
+
+        <form action="#" method="get">
+
+            <!-- Name -->
+            <label for="name">Full Name:</label>
+            <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Enter your full name"
+                minlength="3"
+                maxlength="50"
+                required
+            >
+
+            <br><br>
+
+            <!-- Email -->
+            <label for="email">Email Address:</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Enter your email"
+                required
+            >
+
+            <br><br>
+
+            <!-- Phone -->
+            <label for="phone">Phone Number:</label>
+            <input
+                type="tel"
+                id="phone"
+                name="phone"
+                placeholder="Enter 10 digit phone number"
+                pattern="[0-9]{10}"
+                minlength="10"
+                maxlength="10"
+                required
+            >
+
+            <br><br>
+
+            <!-- Match Selection -->
+            <label for="match">Select Match:</label>
+            <select id="match" name="match" required>
+                <option value="">-- Select a Match --</option>
+                <option value="RCB vs CSK">RCB vs CSK</option>
+                <option value="MI vs KKR">MI vs KKR</option>
+                <option value="CSK vs SRH">CSK vs SRH</option>
+            </select>
+
+            <br><br>
+
+            <!-- Stand Category -->
+            <label for="stand">Select Stand Category:</label>
+            <select id="stand" name="stand" required>
+                <option value="">-- Select Stand --</option>
+                <option value="General">General</option>
+                <option value="Premium">Premium</option>
+                <option value="VIP">VIP</option>
+            </select>
+
+            <br><br>
+
+            <!-- Number of Tickets -->
+            <label for="quantity">Number of Tickets:</label>
+            <input
+                type="number"
+                id="quantity"
+                name="quantity"
+                min="1"
+                max="10"
+                required
+            >
+
+            <br><br>
+
+            <!-- Ticket Preference -->
+            <p><strong>Preferred Seating:</strong></p>
+
+            <input
+                type="radio"
+                id="regular"
+                name="preference"
+                value="Regular"
+                required
+                style="width:auto;"
+            >
+            <label for="regular">Regular Seating</label>
+
+            <br>
+
+            <input
+                type="radio"
+                id="family"
+                name="preference"
+                value="Family"
+                style="width:auto;"
+            >
+            <label for="family">Family Seating</label>
+
+            <br>
+
+            <input
+                type="radio"
+                id="group"
+                name="preference"
+                value="Group"
+                style="width:auto;"
+            >
+            <label for="group">Group Seating</label>
+
+            <br><br>
+
+            <!-- Terms Checkbox -->
+            <input
+                type="checkbox"
+                id="terms"
+                name="terms"
+                required
+                style="width:auto;"
+            >
+            <label for="terms">
+                I agree to the ticket booking guidelines.
+            </label>
+
+            <br><br>
+
+            <!-- Buttons -->
+            <button type="submit">Submit Booking</button>
+
+            <button type="reset">Reset Form</button>
+
+        </form>
+
+        <br>
+
+        <a href="index.html">← Back to Home Page</a>
+
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 StadiumX. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
