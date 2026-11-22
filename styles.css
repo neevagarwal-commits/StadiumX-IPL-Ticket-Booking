@@ -1,10 +1,4 @@
 
-/* =========================================
-   IPL TICKET BOOKING WEBSITE
-   ACTIVITY 2 - CSS STYLING
-========================================= */
-
-/* 1. CSS VARIABLES */
 :root {
     --primary: #071629;
     --secondary: #102b49;
@@ -14,7 +8,6 @@
     --white: #ffffff;
 }
 
-/* 2. GLOBAL STYLING */
 * {
     margin: 0;
     padding: 0;
@@ -24,35 +17,14 @@
 
 body {
     font-family: Arial, Helvetica, sans-serif;
-    background-color: var(--background);
+    background: var(--background);
     color: var(--text);
     line-height: 1.6;
     padding-top: 100px;
 }
 
-h2 {
-    color: var(--primary);
-    font-size: 30px;
-    margin-bottom: 20px;
-}
-
-h3 {
-    color: var(--secondary);
-    margin-top: 20px;
-    margin-bottom: 10px;
-}
-
-p {
-    margin-bottom: 12px;
-}
-
-a {
-    transition: 0.3s;
-}
-
-/* 3. NAVIGATION BAR */
 header {
-    background-color: var(--primary);
+    background: var(--primary);
     color: var(--white);
     padding: 20px 8%;
     position: fixed;
@@ -63,7 +35,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 3px 12px rgba(0,0,0,.2);
 }
 
 header h1 {
@@ -71,47 +43,57 @@ header h1 {
     font-size: 25px;
 }
 
-nav {
-    margin-top: 5px;
-}
-
 nav a {
     color: var(--white);
     text-decoration: none;
     margin: 0 10px;
     font-weight: bold;
+    transition: .3s;
 }
 
 nav a:hover {
     color: var(--accent);
 }
 
-/* 4. HERO SECTION */
-section:first-of-type {
-    background: linear-gradient(
-        135deg,
-        #071629,
-        #163c63,
-        #071629
-    );
+section {
+    padding: 55px 8%;
+}
+
+h2 {
+    color: var(--primary);
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+h3 {
+    color: var(--secondary);
+    margin: 20px 0 10px;
+}
+
+p {
+    margin-bottom: 12px;
+}
+
+.hero {
+    background: linear-gradient(135deg,#071629,#163c63,#071629);
     color: var(--white);
     text-align: center;
     padding: 120px 8%;
 }
 
-section:first-of-type h2 {
+.hero h2 {
     color: var(--accent);
     font-size: 40px;
 }
 
-section:first-of-type p {
+.hero p {
     font-size: 18px;
     margin: 20px 0;
 }
 
-section:first-of-type a {
+.hero a {
     display: inline-block;
-    background-color: var(--accent);
+    background: var(--accent);
     color: var(--primary);
     padding: 12px 25px;
     margin: 10px;
@@ -120,14 +102,13 @@ section:first-of-type a {
     font-weight: bold;
 }
 
-section:first-of-type a:hover {
-    background-color: var(--white);
+.hero a:hover {
+    background: var(--white);
     transform: translateY(-3px);
 }
 
-/* 5. ABOUT IPL SECTION */
 #about {
-    background-color: var(--white);
+    background: var(--white);
 }
 
 #about ul {
@@ -139,29 +120,38 @@ section:first-of-type a:hover {
     margin: 8px 0;
 }
 
-/* 6. MATCH SCHEDULE SECTION */
 #matches {
-    background-color: var(--background);
+    background: var(--background);
+}
+
+select,
+input {
+    font: inherit;
 }
 
 #teamFilter {
     padding: 10px;
     margin: 15px 0 25px;
-    border: 1px solid #cccccc;
+    border: 1px solid #ccc;
     border-radius: 5px;
-    background-color: var(--white);
+    background: var(--white);
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    background-color: var(--white);
+    background: var(--white);
     margin-top: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 12px rgba(0,0,0,.08);
 }
 
 th {
-    background-color: var(--primary);
+    background: var(--primary);
     color: var(--white);
     padding: 15px;
 }
@@ -169,16 +159,16 @@ th {
 td {
     padding: 13px;
     text-align: center;
-    border-bottom: 1px solid #dddddd;
+    border-bottom: 1px solid #ddd;
 }
 
-tr:hover {
-    background-color: #edf1f6;
+tbody tr:hover {
+    background: #edf1f6;
 }
 
 td a {
     display: inline-block;
-    background-color: var(--accent);
+    background: var(--accent);
     color: var(--primary);
     padding: 7px 15px;
     text-decoration: none;
@@ -187,34 +177,36 @@ td a {
 }
 
 td a:hover {
-    background-color: var(--primary);
+    background: var(--primary);
     color: var(--white);
 }
 
-/* 7. BOOKING FORM SECTION */
 #booking {
-    background-color: var(--white);
+    background: var(--white);
+    scroll-margin-top: 100px;
 }
 
 form {
-    background-color: var(--background);
+    background: var(--background);
     padding: 30px;
     border-radius: 10px;
-    border: 1px solid #dddddd;
+    border: 1px solid #ddd;
     max-width: 650px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 15px rgba(0,0,0,.08);
 }
 
-form label {
+form > label {
+    display: block;
     font-weight: bold;
+    margin-top: 12px;
 }
 
-form input,
+form input:not([type="radio"]):not([type="checkbox"]),
 form select {
     width: 100%;
     padding: 12px;
-    margin-top: 8px;
-    border: 1px solid #cccccc;
+    margin: 8px 0 15px;
+    border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 15px;
 }
@@ -225,8 +217,23 @@ form select:focus {
     border-color: var(--accent);
 }
 
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 8px 0;
+}
+
+.radio-option input {
+    width: auto;
+}
+
+.radio-option label {
+    font-weight: normal;
+}
+
 button {
-    background-color: var(--accent);
+    background: var(--accent);
     color: var(--primary);
     padding: 12px 25px;
     border: none;
@@ -234,34 +241,45 @@ button {
     font-weight: bold;
     font-size: 15px;
     cursor: pointer;
-    transition: 0.3s;
+    transition: .3s;
+    margin: 10px 5px 0 0;
 }
 
 button:hover {
-    background-color: var(--primary);
+    background: var(--primary);
     color: var(--white);
 }
 
-#booking h3 {
-    color: var(--primary);
+.reset-button {
+    background: #d9dce2;
 }
 
-#booking p {
-    margin: 12px 0;
+#bookingConfirmation {
+    display: none;
+    margin-top: 20px;
+    padding: 18px;
+    background: #e7f5e9;
+    color: #17652a;
+    border-left: 5px solid #238b45;
+    border-radius: 6px;
+    font-weight: bold;
+    overflow-wrap: anywhere;
 }
 
-/* 8. MY BOOKINGS SECTION */
+#bookingConfirmation.show-confirmation {
+    display: block;
+}
+
 #mybookings {
-    background-color: var(--background);
+    background: var(--background);
 }
 
-/* 9. GUIDELINES SECTION */
 #guidelines {
-    background-color: var(--white);
+    background: var(--white);
 }
 
 #guidelines h3 {
-    background-color: var(--background);
+    background: var(--background);
     padding: 18px;
     border-left: 5px solid var(--accent);
     border-radius: 5px;
@@ -272,9 +290,8 @@ button:hover {
     padding: 5px 18px;
 }
 
-/* 10. FOOTER */
 footer {
-    background-color: var(--primary);
+    background: var(--primary);
     color: var(--white);
     text-align: center;
     padding: 25px;
@@ -284,7 +301,31 @@ footer p {
     margin: 5px;
 }
 
-/* 11. RESPONSIVE DESIGN */
+.toast {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: #151515;
+    color: var(--white);
+    border-left: 4px solid var(--accent);
+    padding: 15px 22px;
+    border-radius: 6px;
+    box-shadow: 0 5px 20px rgba(0,0,0,.3);
+    font-size: 14px;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(15px);
+    transition: .3s ease;
+    max-width: calc(100% - 40px);
+}
+
+.toast.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
 @media (max-width: 900px) {
     header {
         flex-direction: column;
@@ -300,7 +341,7 @@ footer p {
         margin: 5px;
     }
 
-    section:first-of-type h2 {
+    .hero h2 {
         font-size: 30px;
     }
 
@@ -318,18 +359,12 @@ footer p {
         padding: 40px 5%;
     }
 
-    section:first-of-type {
+    .hero {
         padding: 90px 5%;
     }
 
-    section:first-of-type h2 {
+    .hero h2 {
         font-size: 25px;
-    }
-
-    table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
     }
 
     header h1 {
