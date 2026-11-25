@@ -1,18 +1,37 @@
 
 /* =========================================
    STADIUMX - JAVASCRIPT
-   ACTIVITY 5 + BOOKING SYSTEM
+   ACTIVITY 5 + ACTIVITY 7
+   BOOKING SYSTEM + LIVE SUMMARY
 ========================================= */
 
 const STORAGE_KEY = "stadiumXBookings";
 
+// Ticket prices for each match and stand
 const ticketPrices = {
-    "RCB vs CSK": { General: 800, Premium: 2000, VIP: 5000 },
-    "MI vs KKR": { General: 1000, Premium: 2500, VIP: 6000 },
-    "CSK vs SRH": { General: 700, Premium: 1800, VIP: 4500 }
+    "RCB vs CSK": {
+        General: 800,
+        Premium: 2000,
+        VIP: 5000
+    },
+
+    "MI vs KKR": {
+        General: 1000,
+        Premium: 2500,
+        VIP: 6000
+    },
+
+    "CSK vs SRH": {
+        General: 700,
+        Premium: 1800,
+        VIP: 4500
+    }
 };
 
-// 1. Reusable toast notification
+// =========================================
+// 1. REUSABLE TOAST NOTIFICATION
+// =========================================
+
 function showToast(message) {
     let toast = document.getElementById("toast");
 
@@ -33,7 +52,10 @@ function showToast(message) {
     }, 3000);
 }
 
-// 2. Smooth scrolling
+// =========================================
+// 2. SMOOTH SCROLLING
+// =========================================
+
 function scrollToBooking() {
     const section = document.getElementById("booking");
 
@@ -47,60 +69,105 @@ function scrollToBooking() {
     }
 }
 
-// 3. Read saved bookings
+// =========================================
+// 3. GET SAVED BOOKINGS
+// =========================================
+
 function getBookings() {
     try {
-        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        const saved = JSON.parse(
+            localStorage.getItem(STORAGE_KEY) || "[]"
+        );
+
         return Array.isArray(saved) ? saved : [];
+
     } catch (error) {
         return [];
     }
 }
 
-// 4. Save bookings
+// =========================================
+// 4. SAVE BOOKINGS
+// =========================================
+
 function saveBookings(bookings) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(bookings));
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(bookings)
+    );
 }
 
-// 5. Calculate ticket price
+// =========================================
+// 5. GET TICKET PRICE
+// =========================================
+
 function getTicketPrice(match, stand) {
     return ticketPrices[match]?.[stand] || 0;
 }
 
-// 6. Update booking summary
-function updateSummary(form) {
-    const match = form.elements.match.value;
-    const stand = form.elements.stand.value;
-    const quantity = Number(form.elements.quantity.value) || 0;
+// =========================================
+// 6. ACTIVITY 7 - LIVE BOOKING SUMMARY
+// =========================================
 
-    const price = getTicketPrice(match, stand);
+function updateSummary(showNotification = false) {
+
+    // Select form controls using DOM selectors
+    const matchSelect = document.getElementById("match");
+    const standSelect = document.getElementById("stand");
+    const quantityInput = document.getElementById("quantity");
+
+    if (!matchSelect || !standSelect || !quantityInput) {
+        return;
+    }
+
+    // Read the user's selections
+    const selectedMatch = matchSelect.value;
+    const selectedStand = standSelect.value;
+    const quantity = Number(quantityInput.value) || 0;
+
+    // Calculate ticket price and total amount
+    const price = getTicketPrice(selectedMatch, selectedStand);
     const total = price * quantity;
 
-    const values = {
-        summaryMatch: match || "Not Selected",
-        summaryStand: stand || "Not Selected",
-        summaryPrice: price,
-        summaryQuantity: quantity,
-        summaryTotal: total
-    };
+    // Update Booking Summary Card
+    document.getElementById("summaryMatch").textContent =
+        selectedMatch || "Not Selected";
 
-    Object.entries(values).forEach(function ([id, value]) {
-        const element = document.getElementById(id);
-        if (element) element.textContent = value;
-    });
+    document.getElementById("summaryStand").textContent =
+        selectedStand || "Not Selected";
+
+    document.getElementById("summaryPrice").textContent =
+        price;
+
+    document.getElementById("summaryQuantity").textContent =
+        quantity;
+
+    document.getElementById("summaryTotal").textContent =
+        total;
+
+    // Show toast when the user changes a selection
+    if (showNotification) {
+        showToast("Booking summary updated successfully!");
+    }
 }
 
-// 7. Display bookings on home page
+// =========================================
+// 7. DISPLAY SAVED BOOKINGS
+// =========================================
+
 function displayBookings() {
+
     const list = document.getElementById("bookingsList");
     const emptyMessage = document.getElementById("noBookings");
 
     if (!list) return;
 
     const bookings = getBookings();
+
     list.replaceChildren();
 
     bookings.forEach(function (booking) {
+
         const row = document.createElement("tr");
 
         [
@@ -111,22 +178,27 @@ function displayBookings() {
             booking.quantity,
             "₹" + booking.total
         ].forEach(function (value) {
+
             const cell = document.createElement("td");
             cell.textContent = value;
             row.appendChild(cell);
+
         });
 
         const actionCell = document.createElement("td");
+
         const cancelButton = document.createElement("button");
 
         cancelButton.type = "button";
         cancelButton.textContent = "Cancel";
+
         cancelButton.addEventListener("click", function () {
             cancelBooking(booking.id);
         });
 
         actionCell.appendChild(cancelButton);
         row.appendChild(actionCell);
+
         list.appendChild(row);
     });
 
@@ -136,42 +208,67 @@ function displayBookings() {
     }
 }
 
-// 8. Cancel booking
+// =========================================
+// 8. CANCEL BOOKING
+// =========================================
+
 function cancelBooking(id) {
+
     const bookings = getBookings();
-    const updated = bookings.filter(function (booking) {
+
+    const updatedBookings = bookings.filter(function (booking) {
         return booking.id !== id;
     });
 
-    saveBookings(updated);
-    displayBookings();
-    showToast("Booking cancelled successfully.");
+    try {
+        saveBookings(updatedBookings);
+        displayBookings();
+        showToast("Booking cancelled successfully!");
+
+    } catch (error) {
+        showToast("Unable to cancel booking.");
+    }
 }
 
-// 9. Handle form submission
+// =========================================
+// 9. HANDLE BOOKING FORM SUBMISSION
+// =========================================
+
 function handleBooking(event) {
+
     event.preventDefault();
 
     const form = event.currentTarget;
 
-    if (!form.reportValidity()) return;
+    if (!form.reportValidity()) {
+        return;
+    }
 
     const data = new FormData(form);
 
     const name = String(data.get("name") || "").trim();
     const email = String(data.get("email") || "").trim();
     const phone = String(data.get("phone") || "").trim();
+
     const match = data.get("match");
     const stand = data.get("stand");
+
     const quantity = Number(data.get("quantity"));
     const preference = data.get("preference");
 
     const price = getTicketPrice(match, stand);
 
-    if (!name || !email || !/^[0-9]{10}$/.test(phone) ||
-        !Number.isInteger(quantity) || quantity < 1 ||
-        quantity > 10 || !price || !preference) {
-        showToast("Please enter valid booking details.");
+    if (
+        !name ||
+        !email ||
+        !/^[0-9]{10}$/.test(phone) ||
+        !Number.isInteger(quantity) ||
+        quantity < 1 ||
+        quantity > 10 ||
+        !price ||
+        !preference
+    ) {
+        showToast("Please enter valid booking details!");
         return;
     }
 
@@ -190,75 +287,98 @@ function handleBooking(event) {
     };
 
     try {
+
         const bookings = getBookings();
+
         bookings.push(booking);
+
         saveBookings(bookings);
+
     } catch (error) {
+
         showToast("Unable to save booking. Check browser storage.");
         return;
     }
 
-    const confirmation = document.getElementById("bookingConfirmation");
+    // Display booking confirmation
+    const confirmation = document.getElementById(
+        "bookingConfirmation"
+    );
 
     if (confirmation) {
+
         confirmation.textContent =
-            "BOOKING CONFIRMED! Booking ID: " + booking.id +
-            " | Match: " + booking.match +
-            " | Tickets: " + booking.quantity +
-            " | Total: ₹" + booking.total;
+            "BOOKING CONFIRMED! Booking ID: " +
+            booking.id +
+            " | Match: " +
+            booking.match +
+            " | Tickets: " +
+            booking.quantity +
+            " | Total: ₹" +
+            booking.total;
 
         confirmation.classList.add("show-confirmation");
     }
 
     displayBookings();
+
     showToast("Your booking has been confirmed!");
 
+    // Reset form and summary
     form.reset();
 
-    if (document.getElementById("summaryMatch")) {
-        updateSummary(form);
-    }
+    updateSummary(false);
 }
 
-// 10. Initialize website
+// =========================================
+// 10. INITIALIZE WEBSITE
+// =========================================
+
 document.addEventListener("DOMContentLoaded", function () {
 
-    // Smooth scrolling for Book links
-    document.querySelectorAll('a[href="#booking"]').forEach(function (link) {
-        link.addEventListener("click", function (event) {
-            if (document.getElementById("booking")) {
+    // Smooth scrolling for Book buttons
+    document.querySelectorAll('a[href="#booking"]').forEach(
+        function (link) {
+
+            link.addEventListener("click", function (event) {
+
                 event.preventDefault();
 
                 const match = link.dataset.match;
+
                 const matchSelect = document.getElementById("match");
 
                 if (match && matchSelect) {
                     matchSelect.value = match;
+                    updateSummary(false);
                 }
 
                 scrollToBooking();
-
-                const form = document.getElementById("bookingForm");
-                if (form) updateSummary(form);
-            }
-        });
-    });
+            });
+        }
+    );
 
     // Team filter
     const teamFilter = document.getElementById("teamFilter");
 
     if (teamFilter) {
+
         teamFilter.addEventListener("change", function () {
+
             const selected = teamFilter.value;
 
-            document.querySelectorAll("#matchTable tbody tr").forEach(function (row) {
-                const teams = row.dataset.teams || "";
+            document.querySelectorAll("#matchTable tbody tr").forEach(
+                function (row) {
 
-                row.style.display =
-                    selected === "all" || teams.split(" ").includes(selected)
-                        ? ""
-                        : "none";
-            });
+                    const teams = row.dataset.teams || "";
+
+                    row.style.display =
+                        selected === "all" ||
+                        teams.split(" ").includes(selected)
+                            ? ""
+                            : "none";
+                }
+            );
         });
     }
 
@@ -266,37 +386,59 @@ document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("bookingForm");
 
     if (form) {
+
+        // Activity 5: Booking form submission
         form.addEventListener("submit", handleBooking);
 
-        ["match", "stand", "quantity"].forEach(function (field) {
-            const input = form.elements[field];
+        // Activity 7: DOM selectors
+        const matchSelect = form.querySelector("#match");
+        const standSelect = form.querySelector("#stand");
+        const quantityInput = form.querySelector("#quantity");
 
-            input.addEventListener("change", function () {
-                updateSummary(form);
-            });
-
-            input.addEventListener("input", function () {
-                updateSummary(form);
-            });
+        // Listen for match selection changes
+        matchSelect.addEventListener("change", function () {
+            updateSummary(true);
         });
 
-        form.addEventListener("reset", function () {
-            setTimeout(function () {
-                updateSummary(form);
+        // Listen for stand category changes
+        standSelect.addEventListener("change", function () {
+            updateSummary(true);
+        });
 
-                const confirmation =
-                    document.getElementById("bookingConfirmation");
+        // Update quantity while typing
+        quantityInput.addEventListener("input", function () {
+            updateSummary(false);
+        });
+
+        // Confirm quantity selection
+        quantityInput.addEventListener("change", function () {
+            updateSummary(true);
+        });
+
+        // Reset form and summary
+        form.addEventListener("reset", function () {
+
+            setTimeout(function () {
+
+                updateSummary(false);
+
+                const confirmation = document.getElementById(
+                    "bookingConfirmation"
+                );
 
                 if (confirmation) {
                     confirmation.textContent = "";
                     confirmation.classList.remove("show-confirmation");
                 }
+
             }, 0);
         });
 
-        updateSummary(form);
+        // Initial summary
+        updateSummary(false);
     }
 
     // Load saved bookings
     displayBookings();
+
 });
