@@ -1,0 +1,124 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #080f1c;
+  color: white;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 8%;
+  background: #101d30;
+}
+
+.logo {
+  color: white;
+}
+
+.logo span {
+  color: #d6a84f;
+}
+
+.nav-links {
+  display: flex;
+  gap: 30px;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+}
+
+.hero {
+  text-align: center;
+  padding: 100px 20px;
+  background: linear-gradient(135deg, #102b49, #080f1c);
+}
+
+.hero h1 {
+  font-size: 48px;
+  margin-bottom: 8px;
+}
+
+.hero p {
+  margin: 20px 0;
+  color: #cccccc;
+}
+
+.hero-btn {
+  display: inline-block;
+  padding: 13px 25px;
+  background: #d6a84f;
+  color: #080f1c;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.matches {
+  padding: 55px 8%;
+  text-align: center;
+}
+
+.matches h1 {
+  margin-bottom: 30px;
+}
+
+.match-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+.match-card {
+  background: #14243a;
+  padding: 30px 20px;
+  border-radius: 12px;
+  border: 1px solid #34465d;
+}
+
+.match-card h2 {
+  color: #d6a84f;
+  margin-bottom: 20px;
+}
+
+.match-card p {
+  margin: 12px 0;
+  color: #dddddd;
+}
+
+.match-card h3 {
+  margin: 20px 0;
+}
+
+.match-card button {
+  padding: 12px 22px;
+  background: #d6a84f;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .match-container {
+    grid-template-columns: 1fr;
+  }
+
+  .hero h1 {
+    font-size: 32px;
+  }
+
+  .navbar {
+    flex-direction: column;
+    gap: 18px;
+  }
+}
